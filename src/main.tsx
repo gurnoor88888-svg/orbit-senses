@@ -86,7 +86,26 @@ class RootErrorBoundary extends React.Component<
   }
 }
 
-const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
+/** Create the Convex client only when a valid backend URL is configured.
+ *  A missing/invalid URL previously threw at module scope → unrenderable blank page. */
+function createConvexClient(): ConvexReactClient | null {
+  const url = import.meta.env.VITE_CONVEX_URL;
+  if (
+    typeof url === "string" &&
+    (url.startsWith("https://") || url.startsWith("http://") || url.startsWith("wss://") || url.startsWith("ws://"))
+  ) {
+    try {
+      return new ConvexReactClient(url);
+    } catch (err) {
+      console.error("[Orbit Sense] Failed to create Convex client:", err);
+      return null;
+    }
+  }
+  console.warn("[Orbit Sense] VITE_CONVEX_URL is missing or invalid — Convex features disabled.");
+  return null;
+}
+
+const convex = createConvexClient();
 
 
 
@@ -114,42 +133,69 @@ function RouteSyncer() {
 }
 
 
+function AppRoutes() {
+  return (
+    <BrowserRouter>
+      <RouteSyncer />
+      <Suspense fallback={<RouteLoading />}>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/monitor" element={<Monitor />} />
+          <Route path="/experiment" element={<Experiment />} />
+          <Route path="/activity-log" element={<ActivityLog />} />
+          <Route path="/mission-data" element={<MissionData />} />
+          <Route path="/system" element={<SystemStatus />} />
+          <Route path="/about" element={<About />} />
+          <Route
+            path="/auth"
+            element={<AuthPage redirectAfterAuth="/monitor" />}
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <RequireAuth>
+                <Dashboard />
+              </RequireAuth>
+            }
+          />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+  );
+}
+
+/** Shown instead of a blank page when the Convex backend URL is not configured. */
+function MissingConvexConfig() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background p-6 text-foreground">
+      <div className="glass max-w-md rounded-xl p-6 text-center">
+        <p className="font-mono text-[11px] tracking-[0.3em] text-primary">SYSTEM CONFIG ERROR</p>
+        <h1 className="mt-3 font-display text-xl font-semibold">Convex backend not configured</h1>
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">
+          <code className="font-mono text-primary">VITE_CONVEX_URL</code> is missing. Run{" "}
+          <code className="font-mono text-foreground">bunx convex dev --once</code> to provision the
+          backend, then restart the dev server.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RootErrorBoundary>
       <ToolbarErrorBoundary>
         <VlyToolbar />
       </ToolbarErrorBoundary>
-      <ConvexAuthProvider client={convex}>
-        <BrowserRouter>
-          <RouteSyncer />
-          <Suspense fallback={<RouteLoading />}>
-            <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/monitor" element={<Monitor />} />
-              <Route path="/experiment" element={<Experiment />} />
-              <Route path="/activity-log" element={<ActivityLog />} />
-              <Route path="/mission-data" element={<MissionData />} />
-              <Route path="/system" element={<SystemStatus />} />
-              <Route path="/about" element={<About />} />
-              <Route
-                path="/auth"
-                element={<AuthPage redirectAfterAuth="/monitor" />}
-              />
-              <Route
-                path="/dashboard"
-                element={
-                  <RequireAuth>
-                    <Dashboard />
-                  </RequireAuth>
-                }
-              />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
-        <Toaster />
-      </ConvexAuthProvider>
+      {convex ? (
+        <ConvexAuthProvider client={convex}>
+          <AppRoutes />
+          <Toaster />
+        </ConvexAuthProvider>
+      ) : (
+        <MissingConvexConfig />
+      )}
     </RootErrorBoundary>
   </StrictMode>,
 );
