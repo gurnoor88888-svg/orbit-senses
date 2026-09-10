@@ -145,3 +145,8 @@ A security review of the codebase found one item to be aware of:
 
 No other secrets, tokens, or private keys exist in the codebase. Env vars such as
 `VITE_CONVEX_URL` are excluded via `.gitignore`.
+
+### Suggested repository metadata
+
+- **Description:** `AI-Powered Astronaut Activity & Experiment Monitoring System — mission-control dashboard prototype (React · TypeScript · Convex)`
+- **Topics:** `space` `mission-control` `human-activity-recognition` `react` `typescript` `convex` `vite` `demo`

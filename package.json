@@ -1,7 +1,19 @@
 {
-  "name": "vite-template",
+  "name": "orbit-sense",
+  "description": "AI-Powered Astronaut Activity & Experiment Monitoring System — software prototype / demo mission-control dashboard",
+  "keywords": [
+    "space",
+    "mission-control",
+    "human-activity-recognition",
+    "computer-vision-simulation",
+    "react",
+    "typescript",
+    "convex",
+    "vite"
+  ],
+  "license": "MIT",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
