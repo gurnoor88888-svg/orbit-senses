@@ -117,7 +117,14 @@ internally. To push a copy of this code to your own GitHub repository:
 
 1. Download the project (or copy the folder) to your local machine.
 2. Create an empty repository on GitHub (do **not** initialize it with a README).
-3. From the project root, run:
+3. From the project root, run the included script:
+
+```bash
+chmod +x scripts/export-to-github.sh
+./scripts/export-to-github.sh https://github.com/<your-username>/<your-repo>.git
+```
+
+Or run the equivalent commands manually:
 
 ```bash
 git init
