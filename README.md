@@ -59,9 +59,28 @@ bunx convex dev --once
 bun run dev
 ```
 
-Environment variables (`VITE_CONVEX_URL`, Convex deployment, auth keys) are provided by
-the Convex provisioning step above. Copy the printed `VITE_CONVEX_URL` into your shell
-environment or a local `.env` file (never commit `.env`).
+### Environment Variables
+
+Copy `.env.example`-style values into a local `.env` (never commit `.env`):
+
+| Variable            | Source                                                                 |
+| ------------------- | ---------------------------------------------------------------------- |
+| `VITE_CONVEX_URL`   | Printed by `bunx convex dev --once`, or from your Convex dashboard      |
+| `CONVEX_DEPLOYMENT` | Set automatically by the Convex CLI during provisioning                 |
+
+Auth secrets (`JWKS`, `JWT_PRIVATE_KEY`, `SITE_URL`) are provisioned automatically by
+Convex Auth on the backend and are never exposed to the client.
+
+### Docker (production-style demo build)
+
+The Dockerfile builds the static bundle and serves it via nginx with SPA fallback routing:
+
+```bash
+docker build --build-arg VITE_CONVEX_URL=wss://your-deployment.convex.cloud -t orbit-sense .
+docker run -p 8080:80 orbit-sense
+```
+
+Then open http://localhost:8080.
 
 ## Project Structure
 

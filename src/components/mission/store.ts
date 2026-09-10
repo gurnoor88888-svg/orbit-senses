@@ -126,10 +126,10 @@ function tick() {
   };
 
   let { stepIndex, stepProgress, stepVerifiedAt, verifiedAt } = s;
-  let activityConfidence = jitter(s.activityConfidence, 1.6);
-  let stats = { ...s.stats, frames: s.stats.frames + 30 };
+  const activityConfidence = jitter(s.activityConfidence, 1.6);
+  const stats = { ...s.stats, frames: s.stats.frames + 30 };
   let voice = s.voice;
-  let comms = { ...s.comms };
+  const comms = { ...s.comms };
   let perception = s.perception;
 
   // ---- comms cycle ----

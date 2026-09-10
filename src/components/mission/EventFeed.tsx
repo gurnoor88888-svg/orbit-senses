@@ -1,5 +1,4 @@
 import { useMission } from "@/components/mission/store";
-import { Chip } from "@/components/mission/Shell";
 import { cn } from "@/lib/utils";
 import { useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";

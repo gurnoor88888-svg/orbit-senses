@@ -5,16 +5,13 @@ import { CommsPanel, CurrentActivityPanel, PerceptionPanel } from "@/components/
 import { EventFeed } from "@/components/mission/EventFeed";
 import { useMission, formatMET } from "@/components/mission/store";
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
 
 function METClock() {
   const met = useMission().metSeconds;
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
   return (
     <div className="glass flex items-center gap-3 rounded-lg px-4 py-2.5">
       <span className="font-mono text-[10px] tracking-widest text-muted-foreground">MET</span>
-      <span className={cn("font-mono text-lg text-primary", mounted && "tabular-nums")}>{formatMET(met)}</span>
+      <span className={cn("font-mono text-lg text-primary tabular-nums")}>{formatMET(met)}</span>
       <Chip tone="cyan">ELAPSED</Chip>
     </div>
   );
