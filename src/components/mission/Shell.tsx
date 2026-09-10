@@ -18,8 +18,10 @@ import {
   Satellite,
   LogOut,
   Gauge,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
-import { useMission } from "@/components/mission/store";
+import { useMission, toggleVoice } from "@/components/mission/store";
 import { Link, NavLink, useNavigate } from "react-router";
 
 const NAV = [
@@ -46,6 +48,7 @@ export function TopNav() {
   const { user, signOut, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const comms = useMission().comms;
+  const voice = useMission().voice;
   const commsTone =
     comms.status === "NOMINAL" ? "cyan" : comms.status === "COMM GAP" ? "amber" : "green";
   const commsLabel =
@@ -84,6 +87,24 @@ export function TopNav() {
 
         <div className="ml-auto flex items-center gap-2 sm:gap-3">
           <MobileNav />
+          <button
+            type="button"
+            onClick={toggleVoice}
+            aria-pressed={voice.enabled}
+            aria-label={voice.enabled ? "Disable voice assistance" : "Enable voice assistance"}
+            className={cn(
+              "flex cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 transition-colors",
+              voice.enabled
+                ? "border-primary/25 bg-primary/5 text-primary"
+                : "border-border/70 bg-secondary/40 text-muted-foreground hover:text-foreground",
+            )}
+            title={voice.enabled ? "Voice assistance ON — click to disable" : "Voice assistance OFF — click to enable"}
+          >
+            {voice.enabled ? <Volume2 className="size-3.5" /> : <VolumeX className="size-3.5" />}
+            <span className="hidden font-mono text-[11px] tracking-[0.18em] md:inline">
+              {voice.enabled ? "VOICE ON" : "VOICE OFF"}
+            </span>
+          </button>
           <div className="hidden items-center gap-2 rounded-md border border-primary/25 bg-primary/5 px-3 py-1.5 sm:flex">
             <span className="relative flex size-2">
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary opacity-60" />
