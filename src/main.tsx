@@ -3,10 +3,10 @@ import { Toaster } from "@/components/ui/sonner";
 import { RequireAuth } from "@/components/RequireAuth";
 import { VlyToolbar } from "../vly-toolbar-readonly.tsx";
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
-import { ConvexReactClient } from "convex/react";
 import React, { StrictMode, useEffect, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router";
+import { createConvexClient } from "@/lib/convex-client";
 import "./index.css";
 
 // Lazy load route components for better code splitting
@@ -86,26 +86,8 @@ class RootErrorBoundary extends React.Component<
   }
 }
 
-/** Create the Convex client only when a valid backend URL is configured.
- *  A missing/invalid URL previously threw at module scope → unrenderable blank page. */
-function createConvexClient(): ConvexReactClient | null {
-  const url = import.meta.env.VITE_CONVEX_URL;
-  if (
-    typeof url === "string" &&
-    (url.startsWith("https://") || url.startsWith("http://") || url.startsWith("wss://") || url.startsWith("ws://"))
-  ) {
-    try {
-      return new ConvexReactClient(url);
-    } catch (err) {
-      console.error("[Orbit Sense] Failed to create Convex client:", err);
-      return null;
-    }
-  }
-  console.warn("[Orbit Sense] VITE_CONVEX_URL is missing or invalid — Convex features disabled.");
-  return null;
-}
-
-const convex = createConvexClient();
+/** Null when VITE_CONVEX_URL is missing/invalid — AppRoutes renders the config-error screen. */
+const convex = createConvexClient(import.meta.env.VITE_CONVEX_URL);
 
 
 

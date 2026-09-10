@@ -14,6 +14,7 @@ Thanks for your interest in contributing to this prototype!
 ```bash
 bun tsc -b --noEmit   # typecheck (CI enforces this)
 bun run lint          # eslint
+bun test              # unit tests (bun test runner)
 ```
 
 Keep changes minimal and consistent with the existing mission-control theme
