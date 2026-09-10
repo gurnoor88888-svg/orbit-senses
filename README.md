@@ -1,3 +1,28 @@
+# ORBIT SENSE
+
+AI-Powered Astronaut Activity & Experiment Monitoring System — a software prototype / demo mission-control dashboard for autonomous space missions.
+
+## Export to GitHub
+
+This project was built in the Freebuff (Vly) environment, which manages version control internally. To push a copy of this code to your own GitHub repository:
+
+1. Download the project (or copy the folder) to your local machine.
+2. Create an empty repository on GitHub (do **not** initialize it with a README).
+3. From the project root, run:
+
+```bash
+git init
+git add .
+git commit -m "Orbit Sense: AI-powered astronaut activity & experiment monitoring demo"
+git branch -M main
+git remote add origin https://github.com/<your-username>/<your-repo>.git
+git push -u origin main
+```
+
+Replace `<your-username>/<your-repo>` with your actual GitHub repo path. A `.gitignore` is included, so `node_modules`, build output, and env files are excluded automatically.
+
+---
+
 ## Overview
 
 This project uses the following tech stack:
