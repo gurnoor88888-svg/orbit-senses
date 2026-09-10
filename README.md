@@ -131,3 +131,17 @@ git push -u origin main
 Replace `<your-username>/<your-repo>` with your actual GitHub repo path. A `.gitignore`
 is included, so `node_modules`, build output, and env files are excluded automatically.
 CI runs a TypeScript typecheck on every push and PR to `main`.
+
+### Before publishing publicly
+
+A security review of the codebase found one item to be aware of:
+
+- `src/convex/auth/emailOtp.ts` contains a Freebuff **platform-provisioned API key** used
+  to deliver email OTP codes for sign-in. This file is managed by the Freebuff platform
+  (see `DO NOT MODIFY` header) and ships with every Freebuff template. It is not your
+  personal secret and is scoped to the platform's OTP endpoint, but if you plan to run
+  this app outside Freebuff or want a fully clean public repo, replace the email provider
+  with your own (e.g. Resend, Postmark) and remove the hardcoded key.
+
+No other secrets, tokens, or private keys exist in the codebase. Env vars such as
+`VITE_CONVEX_URL` are excluded via `.gitignore`.
